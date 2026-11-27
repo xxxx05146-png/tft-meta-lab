@@ -2,7 +2,6 @@ import { collect } from './sources.mjs';
 import { browserAssets, seed } from './hosted-assets.mjs';
 
 const refreshInterval = 120_000;
-const cacheLifetime = 7 * 24 * 60 * 60;
 const responseHeaders = {
   'Cache-Control': 'no-store',
   'X-Content-Type-Options': 'nosniff',
@@ -33,24 +32,28 @@ export default {
       return json({ error: 'Mở dashboard để cập nhật dữ liệu.' }, 403);
     }
 
-    const cache = globalThis.caches?.default;
-    const key = new Request(new URL('/.meta-cache/snapshot-v1', url));
-    const cooldownKey = new Request(new URL('/.meta-cache/refresh-v1', url));
     try {
-      const cachedResponse = await cache?.match(key);
-      const cached = cachedResponse ? await cachedResponse.json() : seed;
-      if (readOnly || await cache?.match(cooldownKey)) return json(displaySnapshot(cached));
+      const db = env.DB;
+      const stored = await db.prepare('SELECT payload FROM meta_snapshot WHERE id = 1').first();
+      const cached = stored?.payload ? JSON.parse(stored.payload) : seed;
+      if (readOnly) return json(displaySnapshot(cached));
 
-      await cache?.put(cooldownKey, new Response('refreshing', {
-        headers: { 'Cache-Control': `max-age=${refreshInterval / 1000}` },
-      }));
-      const snapshot = await collect(cached, { dragonVersion: env?.TFT_DDRAGON_VERSION });
-      await cache?.put(key, Response.json(snapshot, {
-        headers: { 'Cache-Control': `max-age=${cacheLifetime}` },
-      }));
+      const now = Date.now();
+      const refreshAfter = now + refreshInterval;
+      const lock = await db.prepare(`
+        INSERT INTO meta_snapshot (id, refresh_after) VALUES (1, ?)
+        ON CONFLICT (id) DO UPDATE SET refresh_after = excluded.refresh_after
+        WHERE meta_snapshot.refresh_after <= ?
+      `).bind(refreshAfter, now).run();
+      if (!lock.meta.changes) return json(displaySnapshot(cached));
+
+      const snapshot = await collect(cached, { dragonVersion: env.TFT_DDRAGON_VERSION });
+      await db.prepare('UPDATE meta_snapshot SET payload = ? WHERE id = 1 AND refresh_after = ?')
+        .bind(JSON.stringify(snapshot), refreshAfter).run();
       return json(displaySnapshot(snapshot));
     } catch (error) {
       console.error('Snapshot request failed:', error.message);
+      if (readOnly) return json(displaySnapshot(seed));
       return json({ error: 'Cập nhật chưa thành công. Thử lại sau.' }, 502);
     }
   },
