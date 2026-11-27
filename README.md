@@ -2,6 +2,10 @@
 
 Dashboard tiếng Việt để chọn bài TFT trước trận, kiểm tra cách ghép đồ và ghi kết quả sau trận. Dữ liệu PBE được giữ riêng khỏi live.
 
+## Mở trên trình duyệt
+
+[Dùng TFT Meta Lab trực tuyến](https://tft-meta-lab.kh-ng-gian-l-7410.chatgpt.site). Bấm **Cập nhật dữ liệu** để lấy bản mới. Nhật ký thử bài lưu trong trình duyệt đang dùng.
+
 ## Chạy trên Windows
 
 1. Cài [Node.js 22 trở lên](https://nodejs.org/).
@@ -10,7 +14,7 @@ Dashboard tiếng Việt để chọn bài TFT trước trận, kiểm tra cách
 4. Bấm **Cập nhật dữ liệu** để lấy số liệu mới. Lệnh `npm run sync` tải dữ liệu tương tự từ Terminal. Không cần npm install hay API key.
 5. Chạy `npm test` để kiểm tra cách đọc dữ liệu và tính điểm.
 
-Dashboard chạy cục bộ. Nhật ký thử bài lưu trong trình duyệt theo nguồn, set, patch và đội hình. Trận chưa dựng được bài vẫn được tính để bạn so sánh tỷ lệ hoàn thành bài với tỷ lệ top 4.
+Với bản chạy cục bộ, nhật ký thử bài lưu trong trình duyệt theo nguồn, set, patch và đội hình. Trận chưa dựng được bài vẫn được tính để bạn so sánh tỷ lệ hoàn thành bài với tỷ lệ top 4.
 
 ## Dữ liệu
 

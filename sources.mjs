@@ -43,8 +43,8 @@ export function parseCatalog(documents, version, locale) {
   return { version, locale, units, items, traits };
 }
 
-async function fetchCatalog() {
-  const version = process.env.TFT_DDRAGON_VERSION || (await request(`${DRAGON}/api/versions.json`))[0];
+async function fetchCatalog(dragonVersion) {
+  const version = dragonVersion || (await request(`${DRAGON}/api/versions.json`))[0];
   if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('Phiên bản Data Dragon không hợp lệ.');
   for (const locale of ['vi_VN', 'en_US']) {
     try {
@@ -196,9 +196,9 @@ async function fetchLivePatch() {
   return html.match(/\/news\/game-updates\/teamfight-tactics-patch-(\d+)-(\d+)([a-z]?)(?=[/"\\])/i)?.slice(1).map((part, i) => i === 1 ? `.${part}` : part).join('') ?? null;
 }
 
-export async function collect(previous = {}) {
+export async function collect(previous = {}, { dragonVersion } = {}) {
   const status = {};
-  const catalogPromise = fetchCatalog().then((catalog) => {
+  const catalogPromise = fetchCatalog(dragonVersion).then((catalog) => {
     status.riot = { state: 'ok' };
     return catalog;
   }).catch((error) => {

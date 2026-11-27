@@ -21,7 +21,7 @@ let inFlight;
 export function sync() {
   if (!inFlight) {
     inFlight = (async () => {
-      const snapshot = await collect(await readSnapshot());
+      const snapshot = await collect(await readSnapshot(), { dragonVersion: process.env.TFT_DDRAGON_VERSION });
       await writeFile(temp, JSON.stringify(snapshot), 'utf8');
       await rename(temp, cache);
       return snapshot;
