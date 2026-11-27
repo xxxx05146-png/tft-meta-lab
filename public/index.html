@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10141b">
+  <title>TFT Meta Lab</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <header class="top"><div class="shell top-inner">
+    <a href="./" class="brand"><span class="mark" aria-hidden="true">◈</span> TFT<span>Meta Lab</span></a>
+    <div class="top-actions"><div id="sync-info" class="sync-info"></div><button id="sync" class="action">↻ Cập nhật dữ liệu</button></div>
+  </div></header>
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow" id="set-label">Teamfight Tactics</p>
+        <h1>Tìm bài đáng thử<span>.</span></h1>
+        <p class="intro-copy">So đội hình bằng số liệu, xem cách lên cấp và thử ghép đồ theo mảnh bạn có.</p>
+      </div>
+      <div id="featured" class="featured" hidden></div>
+    </section>
+
+    <div class="toolbar" aria-label="Chế độ xem">
+      <button type="button" class="nav-btn" data-view="browse" aria-pressed="true">Đội hình</button>
+      <button type="button" class="nav-btn" data-view="trials" aria-pressed="false">Nhật ký thử bài <span id="trial-count"></span></button>
+    </div>
+
+    <section id="browse" aria-label="Tra cứu đội hình">
+      <div class="controls">
+        <div class="filters">
+          <label>Nguồn và máy chủ<select id="dataset"></select></label>
+          <label>Tìm tướng hoặc bài<input id="search" type="search" placeholder="Ví dụ Ezreal"></label>
+          <label>Xếp theo<select id="sort">
+            <option value="score">Điểm tổng hợp</option><option value="place">Hạng TB hiệu chỉnh</option>
+            <option value="top4">Top 4 hiệu chỉnh</option><option value="win">Top 1 hiệu chỉnh</option>
+            <option value="playRate">Ít người chơi</option><option value="count">Cỡ mẫu</option>
+          </select></label>
+          <label>Mẫu tối thiểu<input id="min" type="number" min="1" value="200" step="1" inputmode="numeric"></label>
+        </div>
+        <div class="switches">
+          <label><input id="rare" type="checkbox"> Bài mạnh ít người chơi</label>
+          <label id="rate-control" hidden> Tối đa <input type="number" id="max-rate" min="0.01" max="2" step="0.01" value="0.20" inputmode="decimal"> bài/lobby</label>
+          <label><input id="easy" type="checkbox"> Dễ triển khai</label>
+        </div>
+        <details class="inventory"><summary>Mảnh đồ để thử ghép <span id="inventory-count"></span></summary>
+          <div id="components" class="components"></div>
+          <button type="button" id="clear-inventory" class="plain">Xóa mảnh đã chọn</button>
+        </details>
+      </div>
+
+      <div class="section-head">
+        <div><h2>Bảng đội hình <span id="result-count"></span></h2><p id="cohort"></p></div>
+        <p id="dataset-time"></p>
+      </div>
+      <div id="status" role="status" aria-live="polite"></div>
+      <div id="cards" class="cards"></div>
+    </section>
+
+    <section id="trials" hidden aria-label="Nhật ký thử bài">
+      <div class="section-head"><div><h2>Nhật ký thử bài</h2><p>Ghi cả trận chưa hoàn thành đội hình để đo độ dễ triển khai.</p></div></div>
+      <div id="trial-groups" class="cards"></div>
+    </section>
+
+    <details class="method">
+      <summary>Cách tính điểm và nguồn dữ liệu</summary>
+      <p>Điểm tổng hợp trên 100 gồm 65% sức mạnh, 18% độ hiếm, 12% độ dễ triển khai và 5% độ hợp mảnh đồ. Sức mạnh tính theo hạng trung bình (70%) và top 4 (30%). Hạng trung bình, top 4 và top 1 hiệu chỉnh bằng cách thêm 100 mẫu giả định ở mức nền. Điểm độ hiếm giảm dần khi số người chơi trung bình tăng đến 0,50 bài/lobby.</p>
+      <p>Bộ lọc bài mạnh ít người chơi yêu cầu hạng trung bình tốt hơn mức nền, top 4 từ 50% và có số liệu play rate. Mức dễ triển khai là ước lượng dựa trên mốc cấp, giá tướng chủ chốt và dấu hiệu phụ thuộc Ấn. Thống kê đội hình cuối trận thường thiên về các trận đã dựng được bài.</p>
+      <p id="dragon-status"></p>
+      <div class="source-links"><a href="https://www.metatft.com/comps">MetaTFT</a><a href="https://tactics.tools/team-compositions/latest">tactics.tools</a><a href="https://developer.riotgames.com/docs/tft#data-dragon">Riot Data Dragon</a></div>
+    </details>
+  </main>
+  <footer class="shell">TFT Meta Lab isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</footer>
+
+  <dialog id="detail" aria-labelledby="detail-title"><div id="detail-content"></div><form method="dialog" class="close-form"><button class="action" aria-label="Đóng">×</button></form></dialog>
+</body>
+</html>
