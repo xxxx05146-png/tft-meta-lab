@@ -1,3 +1,4 @@
+import { coachRequest } from './coach.mjs';
 import { collect } from './sources.mjs';
 import { browserAssets, seed } from './hosted-assets.mjs';
 
@@ -5,7 +6,7 @@ const refreshInterval = 120_000;
 const responseHeaders = {
   'Cache-Control': 'no-store',
   'X-Content-Type-Options': 'nosniff',
-  'Content-Security-Policy': "default-src 'self'; img-src 'self' https://ddragon.leagueoflegends.com",
+  'Content-Security-Policy': "default-src 'self'; img-src 'self' https://ddragon.leagueoflegends.com https://cdn.metatft.com https://cmsassets.rgpub.io",
 };
 
 function json(data, status = 200) {
@@ -25,6 +26,16 @@ export default {
       return new Response(content, { headers: { ...responseHeaders, 'Content-Type': mime } });
     }
 
+    if (request.method === 'POST' && ['/mcp','/api/study','/api/board'].includes(path)) {
+      try {
+        const body = await request.text();
+        if (body.length > 16384) return json({error:'Yêu cầu quá dài.'},413);
+        return json(await coachRequest(path, request.method, JSON.parse(body), async () => {
+          const row = await env.DB.prepare('SELECT payload FROM meta_snapshot WHERE id = 1').first();
+          return row?.payload ? JSON.parse(row.payload) : seed;
+        }));
+      } catch (e) { return json({error:e.message},400); }
+    }
     const readOnly = request.method === 'GET' && path === '/api/snapshot';
     const update = request.method === 'POST' && path === '/api/sync';
     if (!readOnly && !update) return json({ error: 'Không tìm thấy trang.' }, 404);

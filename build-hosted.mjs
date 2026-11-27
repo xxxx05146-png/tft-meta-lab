@@ -16,9 +16,11 @@ const browserAssets = Object.fromEntries(Object.entries(contentTypes).map(([file
   [file === 'index.html' ? '/' : `/${file}`, [pages[index], mime]]));
 const assetModule = `const browserAssets = ${JSON.stringify(browserAssets)};\nconst seed = ${JSON.stringify(JSON.parse(initial))};`;
 const worker = workerCode.replace(/^import .+;\n/gm, '');
+const extra = await Promise.all(['public/analysis.mjs','coach.mjs'].map(read));
+const logic = extra.join('\n').replace(/^import .+;\n/gm,'').replace(/^export /gm,'');
 const sources = sourceCode.replace(/^export (?=(?:async )?function )/gm, '');
 await mkdir(src('dist/server'), { recursive: true });
-await writeFile(src('dist/server/index.js'), [assetModule, sources, worker].join('\n\n'));
+await writeFile(src('dist/server/index.js'), [assetModule, sources, logic, worker].join('\n\n'));
 try {
   await mkdir(src('dist/.openai'), { recursive: true });
   await copyFile(src('.openai/hosting.json'), src('dist/.openai/hosting.json'));

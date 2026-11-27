@@ -6,6 +6,14 @@ Dashboard tiếng Việt để chọn bài TFT trước trận, kiểm tra cách
 
 [Dùng TFT Meta Lab trực tuyến](https://tft-meta-lab.kh-ng-gian-l-7410.chatgpt.site). Bấm **Cập nhật dữ liệu** để lấy bản mới. Nhật ký thử bài lưu trong trình duyệt đang dùng.
 
+**Tìm bài phù hợp** dùng tướng và lõi giả định để so tối đa ba bài cùng nguồn có ít nhất 200 mẫu. Điểm khớp chiếm 60%, điểm meta chiếm 40%. Lõi anh hùng khớp theo tướng sở hữu. Lõi khác được giữ làm ngữ cảnh để thảo luận. Nút chép câu hỏi gửi kèm đúng bộ số liệu khi bạn dán vào ChatGPT.
+
+**Học xếp cờ** hiển thị chân dung tướng và sơ đồ bốn hàng. Với MetaTFT, chọn một tướng để xem ba vị trí thường gặp nhất trong dữ liệu của bài. Sơ đồ giải quyết ô trùng bằng tần suất đứng từng ô. Tỷ lệ đứng ô và top 4 toàn bài là hai thống kê riêng.
+
+## Trợ lý trên ChatGPT
+
+Dùng tiện ích TFT Meta Lab trong ChatGPT để hỏi bằng tiếng Việt. Hai công cụ chỉ đọc `study_comps` và `study_positioning` lấy số liệu từ cùng backend với web. Ví dụ “Trước trận, tôi muốn tập Ezreal và Sett ở PBE. So sánh ba bài, ghi cỡ mẫu và giải thích vị trí Ezreal”. ChatGPT diễn giải kết quả bằng mô hình của cuộc trò chuyện. Website tự xếp hạng theo công thức trên máy chủ.
+
 ## Chạy trên Windows
 
 1. Cài [Node.js 22 trở lên](https://nodejs.org/).

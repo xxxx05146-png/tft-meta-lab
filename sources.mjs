@@ -127,6 +127,8 @@ export function parseMeta(stats, board, lookup, channel, catalog, livePatch) {
   if (!comps.length) throw new Error('MetaTFT không trả về đội hình có số liệu hợp lệ.');
   return {
     id: `metatft-${channel}`, source: 'MetaTFT', channel, set,
+    clusterVersion: String(stats.cluster_id),
+    heroAugments: Object.fromEntries(Object.entries(details.hero_augment_builds ?? {}).map(([id, v]) => [id, v.augment]).filter(([, id]) => typeof id === "string")),
     patch: channel === 'live' && livePatch?.startsWith(`${set}.`) ? livePatch : null,
     cohort: channel === 'pbe' ? 'Máy chủ thử nghiệm · cửa sổ của MetaTFT' : 'Ranked · bộ lọc mặc định của MetaTFT',
     asOf: asDate(stats.updated), fetchedAt: new Date().toISOString(), baseline: 4.5, total, comps,

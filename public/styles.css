@@ -115,3 +115,49 @@ dialog::backdrop { background: #080a0cc9; }
   .sync-info { display: none; }
 }
 @media (max-width: 530px) { .shell { width: calc(100% - 28px); } .cards { grid-template-columns: 1fr; } .controls { padding: 13px; } }
+
+:root { --background:#130e24; --panel:#211832; --raised:#342441; --border:#594063; --text:#fff8ff; --muted:#d4c2db; --mint:#6ef2e2; --amber:#ffe382; }
+body {font-family:"Be Vietnam Pro", "Inter", system-ui,sans-serif;background:radial-gradient(ellipse at 100% 0%,#3e1755,transparent 56%),#130e24;}
+body.at-home {min-height:100svh;display:grid;align-items:center;background:radial-gradient(ellipse at 24% 18%,#4d2268,transparent 53%),radial-gradient(ellipse at right bottom,#303179,transparent 62%),#120c20;}
+.festival {width:min(1120px,94vw);margin:3vh auto;}
+.poster {position:relative;isolation:isolate;overflow:hidden;min-height:clamp(310px,54vh,580px);border-radius:24px;border:1px solid #b478d0;background:#392166;display:flex;align-items:flex-end;}
+.poster-art {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 38%;z-index:-2;}
+.poster::after {content:"";position:absolute;inset:0;background:linear-gradient(80deg,#120728f2,#24103d9e 34%,transparent 72%),linear-gradient(0deg,#10082277,transparent 45%);z-index:-1;}
+.poster-copy {padding:clamp(22px,5vw,64px);color:#fff8f3;}
+.poster-copy .eyebrow {color:#a9fff1;font-size:.9rem;}
+.poster-copy h1 {font:900 clamp(3.3rem,8.5vw,7rem)/1.02 "Arial Black",system-ui,sans-serif;letter-spacing:-.065em;margin:.3em 0 .14em;}
+.poster-copy em {color:#ffdb78;font-style:italic;}
+.poster-copy p:last-child {margin:0;color:#f6d8ff;font-weight:650;letter-spacing:.08em;}
+.tickets {display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+.ticket {display:grid;text-align:left;gap:8px;padding:clamp(18px,3vw,34px);border:1px solid #ffc3fc;border-radius:18px;transition:transform .15s,filter .15s;color:#211028;position:relative;overflow:hidden;}
+.ticket::after {content:"";position:absolute;right:-40px;bottom:-70%;width:150px;aspect-ratio:1;border:12px double currentColor;border-radius:50%;opacity:.10;}
+.ticket.find {background:linear-gradient(112deg,#ffacdb,#eeb9ff);}
+.ticket.learn {background:linear-gradient(112deg,#8cf3d9,#99d7ff);border-color:#b2ffed;}
+.ticket b {font-size:clamp(1.35rem,3vw,2.15rem);line-height:1.2;letter-spacing:-.035em;}
+.ticket span {font-size:1rem;}
+.ticket:hover {transform:translateY(-2px);filter:brightness(1.04);}
+.top {background:#1b1029;}
+#mode-title {color:var(--text);}
+.card {background:linear-gradient(150deg,#2b1c3c,#211831);border-color:#674a73;}
+.card .metrics,.build {background:#1a1329;}
+.unit {background:#1c1528;width:64px;justify-content:start;}
+.unit img {aspect-ratio:1.25;height:auto;min-height:34px;}
+.unit span {font-size:.78rem;line-height:1.2;padding:3px 1px;}
+.finder-fields {grid-template-columns:1.2fr 1fr auto 1.35fr;align-items:end;}
+.primary {background:#ffaee7;border:0;border-radius:9px;color:#26112b;padding:10px 18px;font-weight:750;}
+.finder-fields button {min-height:40px;}
+#find-status {margin:16px 0;color:#f6daff;}
+.board-rows {display:grid;gap:2px;max-width:510px;margin:10px auto;padding-right:5%;}
+.board-row {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;}
+.board-row:nth-child(even) {transform:translateX(7%);}
+.hex {min-width:0;position:relative;isolation:isolate;display:flex;align-items:end;justify-content:center;aspect-ratio:1.04;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#48345a;border:0;padding:0;color:white;}
+.hex img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;}
+.hex span {font-size:clamp(.55rem,2vw,.79rem);font-weight:700;background:#150b20df;width:100%;padding:3px 0 12%;}
+.hex:focus-visible,.hex:hover:not(:empty) {background:#6c548e;filter:brightness(1.22);}
+.board-info {min-height:2.5em;color:var(--mint);}
+.detail-section .board-axis {text-align:center;color:var(--muted);font-size:.8rem;}
+@media(max-width:700px){.tickets{grid-template-columns:1fr;gap:10px}.finder-fields{grid-template-columns:1fr 1fr}.poster{min-height:40vh}.festival{margin:16px auto}.poster-copy{padding:24px}.ticket{padding:18px 22px}.poster-art{object-position:56% center}}
+@media(prefers-reduced-motion:reduce){.ticket{transition:none}}
+
+#manual-brief {width:100%;min-height:8rem;}
+#chat-tools a {margin-left:.6rem;}

@@ -1,3 +1,4 @@
+import { coachRequest } from './coach.mjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { readSnapshot, sync } from './sync.mjs';
@@ -25,10 +26,20 @@ function json(response, status, data) {
 const server = createServer(async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('X-Content-Type-Options', 'nosniff');
-  response.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://ddragon.leagueoflegends.com");
+  response.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' https://ddragon.leagueoflegends.com https://cdn.metatft.com https://cmsassets.rgpub.io");
   if (!hosts.has(request.headers.host)) return json(response, 403, { error: 'Chỉ phục vụ trên localhost.' });
   const path = (request.url || '/').split('?')[0];
   try {
+    if (request.method === 'POST' && ['/mcp','/api/study','/api/board'].includes(path)) {
+      try {
+        let body = '';
+        for await (const chunk of request) {
+          body += chunk;
+          if (body.length > 16384) return json(response,413,{error:'Yêu cầu quá dài.'});
+        }
+        return json(response,200,await coachRequest(path,request.method,JSON.parse(body),readSnapshot));
+      } catch (e) { return json(response,400,{error:e.message}); }
+    }
     if (request.method === 'GET' && path === '/api/snapshot') {
       return json(response, 200, forDisplay(await readSnapshot()));
     }
